@@ -16,12 +16,10 @@ COPY . .
 RUN flutter build web --release
 
 # Stage 2: Serve with nginx
-FROM cgr.dev/chainguard/nginx:latest
+FROM nginx:alpine
 
 # Copy built web app to nginx
 COPY --from=build /app/build/web /usr/share/nginx/html
 
 # Needed with this image
 EXPOSE 8080
-
-CMD ["nginx", "-g", "daemon off;"]
