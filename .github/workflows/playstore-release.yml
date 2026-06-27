@@ -58,12 +58,20 @@ jobs:
       - name: Build AAB
         run: flutter build appbundle --release
 
+      - name: Generate Play Store release notes
+        run: |
+          mkdir -p distribution/whatsnew
+          cat > distribution/whatsnew/en-US << EOF
+          Review all release changes on : https://github.com/${{ github.repository }}/releases/tag/v${{ env.APP_VERSION }}
+          EOF
+
       - name: Upload AAB to Play Store
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: ${{ env.PACKAGE_NAME }}
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
+          whatsNewDirectory: distribution/whatsnew
           track: ${{ env.TRACK }}
           releaseName: ${{ env.RELEASE_NAME }}
           status: completed
