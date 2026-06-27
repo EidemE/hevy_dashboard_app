@@ -30,7 +30,7 @@ class CsvService {
         eol: '\n', // Fin de ligne
         shouldParseNumbers: true, // Convertir automatiquement les nombres
         allowInvalid: false, // Rejeter les CSV invalides
-      ).convert(csvContent);
+      ).convert(csvContent.replaceAll('\r\n', '\n'));
 
       if (rows.isEmpty) {
         throw CsvParseException(CsvParseErrorType.emptyCsv);
